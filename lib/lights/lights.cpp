@@ -24,7 +24,7 @@ void LightManager::poll()
         // determine some other way to run the lights without the state machine
     }
 }
-}
+
 
 void LightManager::setup()
 {

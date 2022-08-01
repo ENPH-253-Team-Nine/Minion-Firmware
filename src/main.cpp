@@ -11,21 +11,16 @@
 
 long int lastrun;
 
+long int lastSerialWrite;
+
 #include <servoControl.h>
 
 StateMachine::StateManager *stateManager = new StateMachine::StateManager();
 
 lights::LightManager *lightManager = new lights::LightManager();
 
-motors::MotorManager *motorManager = new motors::MotorManager();
-
-trajectory::TrajectoryManager *trajectoryManager = new trajectory::TrajectoryManager();
-
 sensors::SensorManager *sensorManager = new sensors::SensorManager();
 
-bridge::BridgeManager *bridgeManager = new bridge::BridgeManager();
-
-arm::ArmManager *armManager = new arm::ArmManager();
 servos::ServoManager *servoManager = new servos::ServoManager();
 
 void setup()
@@ -34,9 +29,12 @@ void setup()
   motorManager->setup();
   sensorManager->setup();
   servoManager->setup();
+  setupDataStore();
 
+  lastSerialWrite = millis();
 
   Serial.begin(9600);
+  Serial2.begin(9600);
   lastrun = millis();
 }
 
@@ -54,9 +52,11 @@ void loop()
 
   stateManager->poll();
   lightManager->poll();
-  motorManager->poll();
-  trajectoryManager->poll();
-  bridgeManager->poll();
-  armManager->poll();
   servoManager->poll();
+
+  if (millis() - lastSerialWrite >= 500) {
+    Serial2.write(dataStore);
+    lastSerialWrite = millis();
+  }
+
 }
