@@ -2,6 +2,8 @@
 
 uint8_t StateData::sonarServoPos;
 
+int StateData::sonarSweep[36];
+
 MinionDataStore *dataStore = new MinionDataStore();
 
 void setupDataStore() {

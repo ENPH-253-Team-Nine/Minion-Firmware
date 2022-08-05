@@ -146,37 +146,94 @@ void Encoder::EncoderPoll::read(){
     } 
 }
 
+/* Sonar*/
+
+SonarSensor::SonarSensor(){
+    echoR = PA10;
+    trigR = PA9;
+    echoL = PA10;
+    trigL = PA8;
+
+    StateData::sonarServoPos = 0;
+    degreeIndex = 0;
+
+    sonarR = new NewPing(trigR,echoR,100);
+    sonarL = new NewPing(trigL, echoL, 100);
+
+    lastReadingTime = millis();
+}
+
+void SonarSensor::setup(){
+
+}
+
+void SonarSensor::poll(){
+    if(lastReadingTime+readingsDelay_ms <= millis()){
+        //take a reading at the previous degree
+        currentSweep[degreeIndex] = sonarR->convert_cm(sonarR->ping_median(3));
+        //set the next degree for the next servo manager poll
+        degreeIndex = advanceIndex(degreeIndex);
+        StateData::sonarServoPos = getDegreeFromIndex(degreeIndex);
+        lastReadingTime = millis();
+    }
+}
+
+void SonarSensor::read(){
+    if(sweepReady){
+        for(int i=0; i<=350; i++){
+            Serial.println(0);
+        }
+        for(int i = 0; i<36;i++){
+            StateData::sonarSweep[i] = currentSweep[i];
+
+            Serial.println(currentSweep[i]); //debug only
+        }
+        sweepReady = false;
+        
+    }
+}
+
+int SonarSensor::advanceIndex(int index){
+    if(index>=35){
+        degreeDelta = -1;
+        sweepReady = true;
+    } else if(index<=0){
+        degreeDelta = 1;
+        sweepReady = true;
+    }
+
+    return index+degreeDelta;
+
+
+}
 
 /* Sensor Manager */
 
 SensorManager::SensorManager(){
-    polledSensors[polledSensorEnum::IR_STRENGTH_LEFT] = new IRFrequency(&StateData::IR::leftIRStrength,PB1);
-    polledSensors[polledSensorEnum::IR_STRENGTH_RIGHT] = new IRFrequency(&StateData::IR::rightIRStrength,PB0);
-    polledSensors[polledSensorEnum::CLAW_LIMIT_SWITCH] = new Switch(&StateData::switches::clawLimitSwitch, PB13);
-    polledSensors[polledSensorEnum::CLAW_REFLECT] = new ReflectanceSensor(&StateData::reflectances::clawReflectance,PA5);
-    polledSensors[polledSensorEnum::CLAW_HALL_EFFECT] = new HallSensor(&StateData::magnets::clawHall,PA7);
+    sonarSensor = new SonarSensor();
 
     //not dealing with interrupts at the moment, don't know what to do with the HMI
 
-    encoders[encoderEnum::ENCODER_LEFT] = new Encoder(&StateData::encoders::leftEncoderCount,PA3,PA6);
-    encoders[encoderEnum::ENCODER_RIGHT] = new Encoder(&StateData::encoders::rightEncoderCount,PA2,PA4);
 
 }
 
 void SensorManager::poll(){
-    for(AbstractPolledSensor* sensor : polledSensors){
-        sensor->read();
-    }
+    //for(AbstractPolledSensor* sensor : polledSensors){
+     //   sensor->read();
+    //}
+    sonarSensor->poll();
+    sonarSensor->read();
+    
 }
 
 void SensorManager::setup(){
-    for(AbstractPolledSensor* sensor : polledSensors){
-        sensor->setup();
-    }
+    //for(AbstractPolledSensor* sensor : polledSensors){
+    //    sensor->setup();
+    //}
     /*for(AbstractInterruptSensor* sensor : interruptedSensors){
         sensor->setup();
     }*/ //temp ignoring
-    for(Encoder* sensor : encoders){
-        sensor->setup();
-    }
+    //for(Encoder* sensor : encoders){
+    //    sensor->setup();
+    //}
 }

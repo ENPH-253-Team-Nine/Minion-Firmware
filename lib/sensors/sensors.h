@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <stateData.h>
+#include <NewPing.h>
 
 namespace sensors
 {
@@ -105,6 +106,44 @@ namespace sensors
         EncoderValue encoderBValue;
     
     };
+    //sonar is also special
+    class SonarSensor {
+        friend SensorManager;
+    public:
+        SonarSensor(); //there will only ever be one 'virtualized' sonar sensor at this level, so no need to parameterize it.
+        void setup();
+        void poll(); //poll and read have to be called with the same frequency, read always after poll;
+        void read();
+
+    private:
+        int echoR;
+        int trigR;
+        int echoL;
+        int trigL;
+
+        int* servantServo;
+        int degreeIndex = 0;
+        int lastReadingTime;
+        int readingsDelay_ms = 30;
+        int degreeDelta = 1;
+        bool sweepReady;
+
+        NewPing* sonarR;
+        NewPing* sonarL;
+
+        int currentSweep[36];
+
+        inline int getDegreeFromIndex(int index){
+            return index*5;
+        }
+
+        inline int getIndexFromDegree(int degree){
+            return degree/5;
+        }
+
+        int advanceIndex(int index);
+
+    };
 
 
 
@@ -139,6 +178,8 @@ namespace sensors
             ENCODER_RIGHT,
             _LENGTH_ENCODER
         };
+
+        SonarSensor* sonarSensor;
 
         AbstractPolledSensor* polledSensors[polledSensorEnum::_LENGTH_POLLED];
         AbstractInterruptSensor* interruptedSensors[interruptSensorEnum::_LENGTH_INTERRUPT];

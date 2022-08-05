@@ -14,7 +14,7 @@ ServoManager::~ServoManager()
 void ServoManager::setup()
 {
 
-    sonarServo->attach(0);
+    sonarServo->attach(PA6,500,2200,0);
 }
 
 void ServoManager::poll()

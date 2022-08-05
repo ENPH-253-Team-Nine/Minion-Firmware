@@ -7,6 +7,8 @@
 namespace StateData{
 
     extern uint8_t sonarServoPos;
+
+    extern int sonarSweep[36];
 }
 
 struct MinionDataStore {
