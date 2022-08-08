@@ -150,17 +150,14 @@ void Encoder::EncoderPoll::read(){
 /* Sensor Manager */
 
 SensorManager::SensorManager(){
-    polledSensors[polledSensorEnum::IR_STRENGTH_LEFT] = new IRFrequency(&StateData::IR::leftIRStrength,PB1);
-    polledSensors[polledSensorEnum::IR_STRENGTH_RIGHT] = new IRFrequency(&StateData::IR::rightIRStrength,PB0);
-    polledSensors[polledSensorEnum::CLAW_LIMIT_SWITCH] = new Switch(&StateData::switches::clawLimitSwitch, PB13);
-    polledSensors[polledSensorEnum::CLAW_REFLECT] = new ReflectanceSensor(&StateData::reflectances::clawReflectance,PA5);
-    polledSensors[polledSensorEnum::CLAW_HALL_EFFECT] = new HallSensor(&StateData::magnets::clawHall,PA7);
+    polledSensors[polledSensorEnum::LINE_LEFT] = new ReflectanceSensor(&dataStore->lineL,PA5);
+    polledSensors[polledSensorEnum::LINE_RIGHT] = new ReflectanceSensor(&dataStore->lineR,PA4);
+    polledSensors[polledSensorEnum::EDGE_FL] = new ReflectanceSensor(&dataStore->edgeReflectanceFL,PA3);
+    polledSensors[polledSensorEnum::EDGE_FR] = new ReflectanceSensor(&dataStore->edgeReflectanceFR,PA2);
+    polledSensors[polledSensorEnum::EDGE_BL] = new ReflectanceSensor(&dataStore->edgeReflectanceBL,PA1);
+    polledSensors[polledSensorEnum::EDGE_BR] = new ReflectanceSensor(&dataStore->edgeReflectanceBR,PA0);
 
-    //not dealing with interrupts at the moment, don't know what to do with the HMI
-
-    encoders[encoderEnum::ENCODER_LEFT] = new Encoder(&StateData::encoders::leftEncoderCount,PA3,PA6);
-    encoders[encoderEnum::ENCODER_RIGHT] = new Encoder(&StateData::encoders::rightEncoderCount,PA2,PA4);
-
+    // Add servo
 }
 
 void SensorManager::poll(){

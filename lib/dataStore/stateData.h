@@ -22,6 +22,8 @@ struct MinionDataStore {
     uint16_t sonarR;
 };
 
+extern MinionDataStore *dataStore;
+
 void setupDataStore();
 
 

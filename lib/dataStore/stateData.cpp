@@ -2,9 +2,11 @@
 
 uint8_t StateData::sonarServoPos;
 
-MinionDataStore *dataStore = new MinionDataStore();
+MinionDataStore *dataStore;
 
 void setupDataStore() {
+    dataStore = new MinionDataStore();
+
     dataStore->lineL = 0;
     dataStore->lineR = 0;
     dataStore->edgeReflectanceFL = 0;
