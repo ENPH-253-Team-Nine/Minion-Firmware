@@ -13,11 +13,24 @@ void SerialManager::setup() {
 void SerialManager::poll() {
     receiveCommands();
     sendData();
+
+    // Testing:
+
+    // StateData::lineL += 1;
+    // StateData::lineR += 2;
+
+    // StateData::edgeReflectanceFL += 3;
+    // StateData::edgeReflectanceFR += 4;
+    // StateData::edgeReflectanceBL += 5;
+    // StateData::edgeReflectanceBR -= 1;
+    
+    // StateData::sonarObjectAngle = 90;
 }
 
 void SerialManager::receiveCommands() {
     while(true) {
         int receivedByte = Serial.read();
+        StateData::receivedByte = receivedByte;
 
         switch (receivedByte) {
             case DEPLOY_BRIDGE:
@@ -34,6 +47,16 @@ void SerialManager::receiveCommands() {
 }
 
 void SerialManager::sendData() {
-    const char * sendBuf = (const char *)dataStore;
-    Serial1.write(sendBuf, sizeof(*dataStore));
+    DataPacket *packet = new DataPacket(); 
+
+    packet->lineL = StateData::lineL;
+    packet->lineR = StateData::lineR;
+    packet->edgeReflectanceFL = StateData::edgeReflectanceFL;
+    packet->edgeReflectanceFR = StateData::edgeReflectanceFR;
+    packet->edgeReflectanceBL = StateData::edgeReflectanceBL;
+    packet->edgeReflectanceBR = StateData::edgeReflectanceBR;
+
+    const char * sendBuf = (const char *)packet;
+
+    Serial1.write(sendBuf, sizeof(*packet));
 }

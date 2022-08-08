@@ -7,24 +7,18 @@
 namespace StateData{
 
     extern uint8_t sonarServoPos;
+
+    extern uint16_t lineL;
+    extern uint16_t lineR;
+
+    extern uint16_t edgeReflectanceFL;
+    extern uint16_t edgeReflectanceFR;
+    extern uint16_t edgeReflectanceBL;
+    extern uint16_t edgeReflectanceBR;
+
+    extern int16_t sonarObjectAngle;
+
+    extern int receivedByte;
 }
-
-struct MinionDataStore {
-    uint16_t lineL;
-    uint16_t lineR;
-
-    uint16_t edgeReflectanceFL;
-    uint16_t edgeReflectanceFR;
-    uint16_t edgeReflectanceBL;
-    uint16_t edgeReflectanceBR;
-
-    uint16_t sonarL;
-    uint16_t sonarR;
-};
-
-extern MinionDataStore *dataStore;
-
-void setupDataStore();
-
 
 #endif

@@ -6,9 +6,11 @@
 #include <servoControl.h>
 #include <serialComm.h>
 
+int freeMemory();
+
 long int lastrun;
 
-long int lastSerialWrite;
+uint32_t lastSerialWrite;
 
 lights::LightManager *lightManager = new lights::LightManager();
 
@@ -23,7 +25,6 @@ void setup()
   lightManager->setup();
   sensorManager->setup();
   servoManager->setup();
-  setupDataStore();
   serialManager->setup();
 
   lastSerialWrite = millis();
@@ -39,8 +40,16 @@ void loop()
   servoManager->poll();
   serialManager->poll();
 
-  if (millis() - lastSerialWrite >= 500) {
+  if (millis() - lastSerialWrite >= (uint32_t)1000) {
     lastSerialWrite = millis();
-  }
+    Serial.print("~~~ Get: "); Serial.println(StateData::receivedByte);
 
+    Serial.print("~~~ Send: ");
+    Serial.print(StateData::lineL); Serial.print(", ");
+    Serial.print(", ");
+    Serial.print(StateData::edgeReflectanceBR); Serial.print(", ");
+    Serial.println();
+  }
+  delay(100);
 }
+

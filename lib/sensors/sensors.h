@@ -124,8 +124,8 @@ namespace sensors
             EDGE_FR,
             EDGE_BL,
             EDGE_BR,
-            ECHO1,
-            ECHO2,
+            // ECHO1,
+            // ECHO2,
             _LENGTH_POLLED
         };
 

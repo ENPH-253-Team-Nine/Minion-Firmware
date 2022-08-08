@@ -60,7 +60,7 @@ void ReflectanceSensor::setup(){
 }
 
 void ReflectanceSensor::read(){
-    *((double *) storeLocation) = analogRead(pin);
+    *((int *) storeLocation) = analogRead(pin);
 }
 
 /* Hall Effect */
@@ -150,14 +150,13 @@ void Encoder::EncoderPoll::read(){
 /* Sensor Manager */
 
 SensorManager::SensorManager(){
-    polledSensors[polledSensorEnum::LINE_LEFT] = new ReflectanceSensor(&dataStore->lineL,PA5);
-    polledSensors[polledSensorEnum::LINE_RIGHT] = new ReflectanceSensor(&dataStore->lineR,PA4);
-    polledSensors[polledSensorEnum::EDGE_FL] = new ReflectanceSensor(&dataStore->edgeReflectanceFL,PA3);
-    polledSensors[polledSensorEnum::EDGE_FR] = new ReflectanceSensor(&dataStore->edgeReflectanceFR,PA2);
-    polledSensors[polledSensorEnum::EDGE_BL] = new ReflectanceSensor(&dataStore->edgeReflectanceBL,PA1);
-    polledSensors[polledSensorEnum::EDGE_BR] = new ReflectanceSensor(&dataStore->edgeReflectanceBR,PA0);
+    polledSensors[polledSensorEnum::LINE_LEFT] = new ReflectanceSensor(&StateData::lineL,PA5);
+    polledSensors[polledSensorEnum::LINE_RIGHT] = new ReflectanceSensor(&StateData::lineR,PA4);
+    polledSensors[polledSensorEnum::EDGE_FL] = new ReflectanceSensor(&StateData::edgeReflectanceFL,PA3);
+    polledSensors[polledSensorEnum::EDGE_FR] = new ReflectanceSensor(&StateData::edgeReflectanceFR,PA2);
+    polledSensors[polledSensorEnum::EDGE_BL] = new ReflectanceSensor(&StateData::edgeReflectanceBL,PA1);
+    polledSensors[polledSensorEnum::EDGE_BR] = new ReflectanceSensor(&StateData::edgeReflectanceBR,PA0);
 
-    // Add servo
 }
 
 void SensorManager::poll(){
@@ -173,7 +172,7 @@ void SensorManager::setup(){
     /*for(AbstractInterruptSensor* sensor : interruptedSensors){
         sensor->setup();
     }*/ //temp ignoring
-    for(Encoder* sensor : encoders){
-        sensor->setup();
-    }
+    // for(Encoder* sensor : encoders){
+    //     sensor->setup();
+    // }
 }
