@@ -12,16 +12,12 @@ int StateData::sonarProcessing::backgroundMatchAmountPercent = 5;
 int StateData::sonarProcessing::algorithm = 1 ;
 int StateData::sonarHeadingOutput;
 
-MinionDataStore *dataStore = new MinionDataStore();
+uint16_t StateData::lineL;
+uint16_t StateData::lineR;
+uint16_t StateData::edgeReflectanceFL;
+uint16_t StateData::edgeReflectanceFR;
+uint16_t StateData::edgeReflectanceBL;
+uint16_t StateData::edgeReflectanceBR;
+int16_t StateData::sonarObjectAngle;
 
-void setupDataStore() {
-    dataStore->lineL = 0;
-    dataStore->lineR = 0;
-    dataStore->edgeReflectanceFL = 0;
-    dataStore->edgeReflectanceFR = 0;
-    dataStore->edgeReflectanceBL = 0;
-    dataStore->edgeReflectanceBR = 0;
-    dataStore->sonarL = 0;
-    dataStore->sonarR = 0;
-}
-
+int StateData::receivedByte;

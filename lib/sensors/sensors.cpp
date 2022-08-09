@@ -60,7 +60,7 @@ void ReflectanceSensor::setup(){
 }
 
 void ReflectanceSensor::read(){
-    *((double *) storeLocation) = analogRead(pin);
+    *((int *) storeLocation) = analogRead(pin);
 }
 
 /* Hall Effect */
@@ -219,6 +219,13 @@ SensorManager::SensorManager(){
     //not dealing with interrupts at the moment, don't know what to do with the HMI
 
 
+    polledSensors[polledSensorEnum::LINE_LEFT] = new ReflectanceSensor(&StateData::lineL,PA5);
+    polledSensors[polledSensorEnum::LINE_RIGHT] = new ReflectanceSensor(&StateData::lineR,PA4);
+    polledSensors[polledSensorEnum::EDGE_FL] = new ReflectanceSensor(&StateData::edgeReflectanceFL,PA3);
+    polledSensors[polledSensorEnum::EDGE_FR] = new ReflectanceSensor(&StateData::edgeReflectanceFR,PA2);
+    polledSensors[polledSensorEnum::EDGE_BL] = new ReflectanceSensor(&StateData::edgeReflectanceBL,PA1);
+    polledSensors[polledSensorEnum::EDGE_BR] = new ReflectanceSensor(&StateData::edgeReflectanceBR,PA0);
+
 }
 
 void SensorManager::poll(){
@@ -240,4 +247,8 @@ void SensorManager::setup(){
     //for(Encoder* sensor : encoders){
     //    sensor->setup();
     //}
+
+    // for(Encoder* sensor : encoders){
+    //     sensor->setup();
+    // }
 }

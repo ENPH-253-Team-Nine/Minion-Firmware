@@ -7,7 +7,6 @@
 namespace StateData{
 
     extern uint8_t sonarServoPos;
-
     namespace sonarProcessing{
         extern uint8_t idolWidth;
         extern uint8_t idolWidthError;
@@ -20,20 +19,18 @@ namespace StateData{
     extern int sonarHeadingOutput;
 }
 
-struct MinionDataStore {
-    uint16_t lineL;
-    uint16_t lineR;
 
-    uint16_t edgeReflectanceFL;
-    uint16_t edgeReflectanceFR;
-    uint16_t edgeReflectanceBL;
-    uint16_t edgeReflectanceBR;
+    extern uint16_t lineL;
+    extern uint16_t lineR;
 
-    uint16_t sonarL;
-    uint16_t sonarR;
-};
+    extern uint16_t edgeReflectanceFL;
+    extern uint16_t edgeReflectanceFR;
+    extern uint16_t edgeReflectanceBL;
+    extern uint16_t edgeReflectanceBR;
 
-void setupDataStore();
+    extern int16_t sonarObjectAngle;
 
+    extern int receivedByte;
+}
 
 #endif

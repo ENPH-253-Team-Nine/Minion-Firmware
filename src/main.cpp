@@ -7,9 +7,14 @@
 
 
 long int lastrun;
-
 #include <servoControl.h>
+#include <serialComm.h>
 
+
+
+long int lastrun;
+
+uint32_t lastSerialWrite;
 
 lights::LightManager *lightManager = new lights::LightManager();
 
@@ -24,11 +29,16 @@ int degree = 0;
 
 void smoothReadings(int* arr, int len);
 
+serialComm::SerialManager *serialManager = new serialComm::SerialManager();
+
 void setup()
 {
   lightManager->setup();
   sensorManager->setup();
   servoManager->setup();
+  serialManager->setup();
+
+  lastSerialWrite = millis();
 
   Serial.begin(9600);
   lastrun = millis();
@@ -40,35 +50,6 @@ void loop()
   servoManager->poll();
   lightManager->poll();
 
-  // StateData::sonarServoPos = degree;
-  // servoManager->poll();
-  // delay(30);
-  // sonarReadings[readingsIndex] = ultrasonic->read();
-  // degree+=5;
-  // readingsIndex++;
-  // sensorManager->poll();
-  // lightManager->poll();
-
-  // if(degree == 180){
-  //   delay(100);
-  //   degree = 0;
-  //   readingsIndex = 0;
-  //   //smoothReadings(sonarReadings, 36);
-  //   StateData::sonarServoPos = degree;
-  //   Serial.print("[");
-  //   for(int i = 0; i<36; i++){
-  //     Serial.println(sonarReadings[i]);
-  //     //Serial.print(", ");
-  //   }
-  //   for(int i = 0; i<=350; i++){
-  //   Serial.println(0);
-  //   }
-  //   //Serial.println("]");
-  //   servoManager->poll();
-  //   delay(2000);
-  //}
-  
-
 }
 void smoothReadings(int* arr, int len){
   int newArr[len];
@@ -79,3 +60,21 @@ void smoothReadings(int* arr, int len){
   }
   arr = newArr;
 }
+
+  lightManager->poll();
+  servoManager->poll();
+  serialManager->poll();
+
+  if (millis() - lastSerialWrite >= (uint32_t)1000) {
+    lastSerialWrite = millis();
+    Serial.print("~~~ Get: "); Serial.println(StateData::receivedByte);
+
+    Serial.print("~~~ Send: ");
+    Serial.print(StateData::lineL); Serial.print(", ");
+    Serial.print(", ");
+    Serial.print(StateData::edgeReflectanceBR); Serial.print(", ");
+    Serial.println();
+  }
+  delay(100);
+}
+

@@ -160,11 +160,14 @@ namespace sensors
 
     private:
         enum polledSensorEnum{
-            IR_STRENGTH_LEFT,
-            IR_STRENGTH_RIGHT,
-            CLAW_LIMIT_SWITCH,
-            CLAW_REFLECT,
-            CLAW_HALL_EFFECT,
+            LINE_LEFT,
+            LINE_RIGHT,
+            EDGE_FL,
+            EDGE_FR,
+            EDGE_BL,
+            EDGE_BR,
+            // ECHO1,
+            // ECHO2,
             _LENGTH_POLLED
         };
 
