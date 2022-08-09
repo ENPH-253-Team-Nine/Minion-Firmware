@@ -158,19 +158,21 @@ SonarSensor::SonarSensor(){
     degreeIndex = 0;
 
     sonarR = new NewPing(trigR,echoR,100);
-    sonarL = new NewPing(trigL, echoL, 100);
+    //sonarL = new NewPing(trigL, echoL, 100);
 
     lastReadingTime = millis();
+
+    this->processor = new sonar::Processor();
 }
 
 void SonarSensor::setup(){
-
+    
 }
 
 void SonarSensor::poll(){
     if(lastReadingTime+readingsDelay_ms <= millis()){
         //take a reading at the previous degree
-        currentSweep[degreeIndex] = sonarR->convert_cm(sonarR->ping_median(3));
+        currentSweep[degreeIndex] = sonarR->ping_cm();
         //set the next degree for the next servo manager poll
         degreeIndex = advanceIndex(degreeIndex);
         StateData::sonarServoPos = getDegreeFromIndex(degreeIndex);
@@ -181,13 +183,15 @@ void SonarSensor::poll(){
 void SonarSensor::read(){
     if(sweepReady){
         for(int i=0; i<=350; i++){
-            Serial.println(0);
+            //Serial.println(0);
         }
         for(int i = 0; i<36;i++){
             StateData::sonarSweep[i] = currentSweep[i];
 
             Serial.println(currentSweep[i]); //debug only
         }
+        processor->process();
+        Serial.print("target hdg: "); Serial.println(StateData::sonarHeadingOutput);
         sweepReady = false;
         
     }

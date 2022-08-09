@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <stateData.h>
 #include <NewPing.h>
+#include <sonar.h>
 
 namespace sensors
 {
@@ -142,6 +143,8 @@ namespace sensors
         }
 
         int advanceIndex(int index);
+
+        sonar::Processor* processor;
 
     };
 

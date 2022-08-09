@@ -8,7 +8,16 @@ namespace StateData{
 
     extern uint8_t sonarServoPos;
 
+    namespace sonarProcessing{
+        extern uint8_t idolWidth;
+        extern uint8_t idolWidthError;
+        extern int backgroundMatchFactorPercent;
+        extern int backgroundMatchAmountPercent;
+        extern int algorithm;
+    }
+
     extern int sonarSweep[36];
+    extern int sonarHeadingOutput;
 }
 
 struct MinionDataStore {
